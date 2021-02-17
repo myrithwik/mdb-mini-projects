@@ -202,7 +202,16 @@ class RollCallVC: UIViewController {
     
     @objc func didTapButton(_ sender: UIButton) {
         
-        // MARK: >> Your Code Here <<
+        if sender.tag == 0 {
+            presentNames.append(nameLabel.text!)
+        } else {
+            absentNames.append(nameLabel.text!)
+        }
+        
+        guard let nextName = namesToCall.popLast() else {
+            presentResult()
+            return
+        }
         
         // UIView.animate() is incredibly versatile. You can use it to animate
         // opacity, color, and even constraints! Here we use it to create a simple
@@ -210,7 +219,7 @@ class RollCallVC: UIViewController {
         UIView.animate(withDuration: 0.3, animations: {
             self.nameLabel.alpha = 0
         }, completion: { _ in
-            // MARK: >> Your Code Here <<
+            self.nameLabel.text = nextName
             UIView.animate(withDuration: 0.3, animations: {
                 self.nameLabel.alpha = 1
             })
@@ -220,7 +229,8 @@ class RollCallVC: UIViewController {
     func presentResult() {
         let vc = ResultVC()
         
-        // MARK: >> Your Code Here <<
+        vc.absentNameList = absentNames
+        vc.presentNameList = presentNames
         
         vc.modalPresentationStyle = .fullScreen
         

@@ -87,21 +87,21 @@ class ResultVC: UIViewController {
         // value. The new value will be binded to a special keyword
         // newValue
         willSet {
-            // MARK: >> Your Code Here <<
+            let text = newValue.joined(separator: ", ")
             // Then uncomment the following lines
             
-//            let attrText = NSAttributedString(string: text, attributes: [
-//                .font: UIFont.systemFont(ofSize: 18, weight: .medium)
-//            ])
-//
-//            let baseAttrText = absentNamesLabel.attributedText!
-//
-//            let mutableAttrText = NSMutableAttributedString()
-//
-//            mutableAttrText.append(baseAttrText)
-//            mutableAttrText.append(attrText)
-//
-//            absentNamesLabel.attributedText = mutableAttrText
+            let attrText = NSAttributedString(string: text, attributes: [
+                .font: UIFont.systemFont(ofSize: 18, weight: .medium)
+            ])
+
+            let baseAttrText = absentNamesLabel.attributedText!
+
+            let mutableAttrText = NSMutableAttributedString()
+
+            mutableAttrText.append(baseAttrText)
+            mutableAttrText.append(attrText)
+
+            absentNamesLabel.attributedText = mutableAttrText
         }
     }
     
@@ -112,21 +112,21 @@ class ResultVC: UIViewController {
         // So the new value would just be the property itself, and the
         // previous value is binded to the keyword oldValue.
         didSet {
-            // MARK: >> Your Code Here <<
+            let text = presentNameList.joined(separator: ", ")
             // Then uncomment the following lines
             
-//            let attrText = NSAttributedString(string: text, attributes: [
-//                .font: UIFont.systemFont(ofSize: 18, weight: .medium)
-//            ])
-//
-//            let baseAttrText = presentNamesLabel.attributedText!
-//
-//            let mutableAttrText = NSMutableAttributedString()
-//
-//            mutableAttrText.append(baseAttrText)
-//            mutableAttrText.append(attrText)
-//
-//            presentNamesLabel.attributedText = mutableAttrText
+            let attrText = NSAttributedString(string: text, attributes: [
+                .font: UIFont.systemFont(ofSize: 18, weight: .medium)
+            ])
+
+            let baseAttrText = presentNamesLabel.attributedText!
+
+            let mutableAttrText = NSMutableAttributedString()
+
+            mutableAttrText.append(baseAttrText)
+            mutableAttrText.append(attrText)
+
+            presentNamesLabel.attributedText = mutableAttrText
         }
     }
 
@@ -148,11 +148,16 @@ class ResultVC: UIViewController {
         //                  \
         //
         // -----------------------------
-        // MARK: >> Your Code Here <<
+        view.addSubview(mainViewStack)
+        mainViewStack.addArrangedSubview(presentNamesLabel)
+        mainViewStack.addArrangedSubview(absentNamesLabel)
+        mainViewStack.addArrangedSubview(resetButton)
         
         
         NSLayoutConstraint.activate([
-            // MARK: >> Your Code Here <<
+            view.centerXAnchor.constraint(equalTo: mainViewStack.centerXAnchor),
+            view.centerYAnchor.constraint(equalTo: mainViewStack.centerYAnchor),
+            mainViewStack.widthAnchor.constraint(equalToConstant: view.bounds.width * 0.75)
         ])
         
         resetButton.addTarget(self, action: #selector(didTapReset(_:)), for: .touchUpInside)
