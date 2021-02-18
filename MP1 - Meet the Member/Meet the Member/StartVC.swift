@@ -51,7 +51,7 @@ class StartVC: UIViewController {
         button.setTitle("Start", for: .normal)
         
         button.setTitleColor(.blue, for: .normal)
-        
+                
         // MARK: STEP 1: UIButton Customization
         // Create you own customized UIButton.
         //
@@ -61,8 +61,8 @@ class StartVC: UIViewController {
         // You can also go to https://developer.apple.com/documentation/uikit/uibutton#topics
         // where you will find all the available APIs.
         
-        // MARK: >> Your Code Here <<
-        
+        button.backgroundColor = .systemGreen
+
         button.translatesAutoresizingMaskIntoConstraints = false
         
         return button
@@ -126,7 +126,9 @@ class StartVC: UIViewController {
         
         // A view must be in the hierarchy before constraints are added.
         NSLayoutConstraint.activate([
-            // MARK: >> Your Code Here <<
+            startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            startButton.topAnchor.constraint(equalTo: welcomeLabel.bottomAnchor, constant: 200),
+            startButton.widthAnchor.constraint(equalToConstant:200)
         ])
         
         // MARK: STEP 3: Adding Callbacks
