@@ -71,8 +71,12 @@ class MainVC: UIViewController {
         // for the layout. Then run the app with ⌘+r. You should see the image
         // for the first question as well as the four options.
         
-        // MARK: >> Your Code Here <<
-        
+        view.addSubview(imageView)
+        view.addSubview(buttons[0])
+        view.addSubview(buttons[1])
+        view.addSubview(buttons[2])
+        view.addSubview(buttons[3])
+
         getNextQuestion()
         
         // MARK: STEP 10: Adding Callback to the Buttons
@@ -111,13 +115,22 @@ class MainVC: UIViewController {
         // QuestionProvider.Question type. You will need that for the
         // following steps.
         
-        // MARK: >> Your Code Here <<
+        let QP = QuestionProvider()
+        
+        guard let question = QP.getNextQuestion() else { return }
+        
+        
         
         // MARK: STEP 6: Data Population
         // Populate the imageView and buttons using the question object we obtained
         // above.
         
-        // MARK: >> Your Code Here <<
+        imageView.image = question.image
+        
+        buttons[0].setTitle(question.choices[0], for: .normal)
+        buttons[1].setTitle(question.choices[1], for: .normal)
+        buttons[2].setTitle(question.choices[2], for: .normal)
+        buttons[3].setTitle(question.choices[3], for: .normal)
     }
     
     // This function will be called every one second
