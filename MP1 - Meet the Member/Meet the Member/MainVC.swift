@@ -75,10 +75,48 @@ class MainVC: UIViewController {
         // for the first question as well as the four options.
         
         view.addSubview(imageView)
+        
+        NSLayoutConstraint.activate([
+            imageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            
+            imageView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 55),
+            
+            imageView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -55),
+            
+            imageView.heightAnchor.constraint(equalToConstant: 250)
+        ])
+        
         view.addSubview(buttons[0])
+        
+        NSLayoutConstraint.activate([
+            buttons[0].topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 30),
+            buttons[0].centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttons[0].widthAnchor.constraint(equalToConstant: 200)
+        ])
+        
         view.addSubview(buttons[1])
+        
+        NSLayoutConstraint.activate([
+            buttons[1].topAnchor.constraint(equalTo: buttons[0].bottomAnchor, constant: 10),
+            buttons[1].centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttons[1].widthAnchor.constraint(equalToConstant: 200)
+        ])
+        
         view.addSubview(buttons[2])
+        
+        NSLayoutConstraint.activate([
+            buttons[2].topAnchor.constraint(equalTo: buttons[1].bottomAnchor, constant: 10),
+            buttons[2].centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttons[2].widthAnchor.constraint(equalToConstant: 200)
+        ])
+        
         view.addSubview(buttons[3])
+        
+        NSLayoutConstraint.activate([
+            buttons[3].topAnchor.constraint(equalTo: buttons[2].bottomAnchor, constant: 10),
+            buttons[3].centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            buttons[3].widthAnchor.constraint(equalToConstant: 200)
+        ])
 
         getNextQuestion()
         
