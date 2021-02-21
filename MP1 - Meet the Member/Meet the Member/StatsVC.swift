@@ -20,6 +20,8 @@ class StatsVC: UIViewController {
     
     // Method 1: Implicit Unwrapped Instance Property
     var dataWeNeedExample1: String!
+    var streak: Int!
+    var lastThree: [String]!
     //
     // Check didTapStats in MainVC.swift on how to use it.
     //
@@ -71,9 +73,31 @@ class StatsVC: UIViewController {
     
     // MARK: >> Your Code Here <<
     
+    private let streakLabel: UILabel = {
+        let label = UILabel()
+        
+        // == UIColor.darkGray
+        label.textColor = .darkGray
+        
+//        let stringtemp = String(streak)
+        
+//        label.text = stringtemp
+        
+        // == NSTextAlignment(expected type).center
+        label.textAlignment = .center
+        
+        // == UIFont.systemFont(ofSize: 27, UIFont.weight.medium)
+        label.font = .systemFont(ofSize: 27, weight: .medium)
+        
+        // Must have if you are using constraints
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // MARK: >> Your Code Here <<
+        view.addSubview(streakLabel)
     }
 }

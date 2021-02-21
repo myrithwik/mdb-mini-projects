@@ -12,6 +12,11 @@ class MainVC: UIViewController {
     
     // Create a property for our timer, we will initialize it in viewDidLoad
     var timer: Timer?
+    var correct: Int = 0
+    var score: Int = 0
+    var streak: Int = 0
+    var lastThree:[String] = ["NA", "NA", "NA"]
+    var numAnswered: Int = 0
     
     // MARK: STEP 8: UI Customization
     // Customize your imageView and buttons. Run the app to see how they look.
@@ -37,13 +42,35 @@ class MainVC: UIViewController {
             // Tag the button its index
             button.tag = index
             
-            // MARK: >> Your Code Here <<
+            button.setTitleColor(.black, for: .normal)
+
+            button.backgroundColor = .systemGray
             
             button.translatesAutoresizingMaskIntoConstraints = false
             
             return button
         }
         
+    }()
+    
+    let scoreLabel: UILabel = {
+        let label = UILabel()
+        
+        // == UIColor.darkGray
+        label.textColor = .darkGray
+        
+        label.text = "Score:"
+        
+        // == NSTextAlignment(expected type).center
+        label.textAlignment = .center
+        
+        // == UIFont.systemFont(ofSize: 27, UIFont.weight.medium)
+        label.font = .systemFont(ofSize: 27, weight: .medium)
+        
+        // Must have if you are using constraints
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
     }()
     
     // MARK: STEP 12: Stats Button
@@ -53,13 +80,25 @@ class MainVC: UIViewController {
     // constraints. Finally, connect the button's with the @objc
     // function didTapStats.
     
-    // MARK: >> Your Code Here <<
+    private let statsButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("Stats", for: .normal)
+        
+        button.setTitleColor(.black, for: .normal)
+        
+        button.backgroundColor = .systemBlue
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
     
     override func viewDidLoad() {
         view.backgroundColor = .white
         
         // Create a timer that calls timerCallback() every one second
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
         
         // If you don't like the default presentation style,
         // you can change it to full screen too! This way you
@@ -73,6 +112,13 @@ class MainVC: UIViewController {
         // Add imageViews and buttons to the root view. Create constaints
         // for the layout. Then run the app with ⌘+r. You should see the image
         // for the first question as well as the four options.
+        
+        view.addSubview(scoreLabel)
+        
+        NSLayoutConstraint.activate([
+            scoreLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
+            scoreLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
+        ])
         
         view.addSubview(imageView)
         
@@ -117,6 +163,14 @@ class MainVC: UIViewController {
             buttons[3].centerXAnchor.constraint(equalTo: view.centerXAnchor),
             buttons[3].widthAnchor.constraint(equalToConstant: 200)
         ])
+        
+        view.addSubview(statsButton)
+        
+        NSLayoutConstraint.activate([
+            statsButton.topAnchor.constraint(equalTo: buttons[3].bottomAnchor, constant: 10),
+            statsButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            statsButton.widthAnchor.constraint(equalToConstant: 200)
+        ])
 
         getNextQuestion()
         
@@ -127,13 +181,17 @@ class MainVC: UIViewController {
         // Challenge: Try not to use four separate statements. There's a
         // cleaner way to do this, see if you can figure it out.
         
-        // MARK: >> Your Code Here <<
+        buttons[0].addTarget(self, action: #selector(didTapAnswer(_:)), for: .touchUpInside)
+        buttons[1].addTarget(self, action: #selector(didTapAnswer(_:)), for: .touchUpInside)
+        buttons[2].addTarget(self, action: #selector(didTapAnswer(_:)), for: .touchUpInside)
+        buttons[3].addTarget(self, action: #selector(didTapAnswer(_:)), for: .touchUpInside)
+
         
         
         // MARK: STEP 12: Stats Button
         // Follow instructions at :49
         
-        // MARK: >> Your Code Here <<
+        statsButton.addTarget(self, action: #selector(didTapStats(_:)), for: .touchUpInside)
     }
     
     // What's the difference between viewDidLoad() and
@@ -160,14 +218,17 @@ class MainVC: UIViewController {
         
         guard let question = QP.getNextQuestion() else { return }
         
+        for n in 0...3 {
+            if question.choices[n] == question.answer {
+                correct = n
+            }
+        }
         
         
         // MARK: STEP 6: Data Population
         // Populate the imageView and buttons using the question object we obtained
         // above.
-        
         imageView.image = question.image
-        
         buttons[0].setTitle(question.choices[0], for: .normal)
         buttons[1].setTitle(question.choices[1], for: .normal)
         buttons[2].setTitle(question.choices[2], for: .normal)
@@ -182,9 +243,9 @@ class MainVC: UIViewController {
         // the instruction here is intentionally vague, so read the spec
         // and take some time to plan. you may need
         // to come back and rework this step later on.
-        
-        // MARK: >> Your Code Here <<
+        getNextQuestion()
     }
+    
     
     @objc func didTapAnswer(_ sender: UIButton) {
         // MARK: STEP 9: Buttons' Logic
@@ -197,8 +258,19 @@ class MainVC: UIViewController {
         // and rework this step later on.
         //
         // Hint: You can use `sender.tag` to identify which button is tapped
+        if sender.tag == correct {
+            score = score + 1
+            streak+=1
+            lastThree[numAnswered%3] = "Correct"
+            numAnswered+=1
+        }
         
-        // MARK: >> Your Code Here <<
+        streak = 0
+        lastThree[numAnswered%3] = "Incorrect"
+        numAnswered+=1
+        getNextQuestion()
+        
+        
     }
     
     @objc func didTapStats(_ sender: UIButton) {
@@ -206,6 +278,10 @@ class MainVC: UIViewController {
         let vc = StatsVC(data: "Hello")
         
         vc.dataWeNeedExample1 = "Hello"
+        
+        vc.streak = streak
+        
+        vc.lastThree = lastThree
         
         // MARK: STEP 13: StatsVC Data
         // Follow instructions in StatsVC. You also need to invalidate
