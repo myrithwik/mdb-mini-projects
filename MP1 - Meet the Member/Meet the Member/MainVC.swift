@@ -12,11 +12,14 @@ class MainVC: UIViewController {
     
     // Create a property for our timer, we will initialize it in viewDidLoad
     var timer: Timer?
+    var timer2: Timer?
+    var isPaused = false
     var correct: Int = 0
     var score: Int = 0
     var streak: Int = 0
     var lastThree:[String] = ["NA", "NA", "NA"]
     var numAnswered: Int = 0
+    var currTime: Int = 8
     
     // MARK: STEP 8: UI Customization
     // Customize your imageView and buttons. Run the app to see how they look.
@@ -59,8 +62,8 @@ class MainVC: UIViewController {
         // == UIColor.darkGray
         label.textColor = .darkGray
         
-        label.text = "Score:"
-        
+        label.text = "Score: 0"
+            
         // == NSTextAlignment(expected type).center
         label.textAlignment = .center
         
@@ -98,7 +101,7 @@ class MainVC: UIViewController {
         view.backgroundColor = .white
         
         // Create a timer that calls timerCallback() every one second
-        timer = Timer.scheduledTimer(timeInterval: 5.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
         
         // If you don't like the default presentation style,
         // you can change it to full screen too! This way you
@@ -200,7 +203,7 @@ class MainVC: UIViewController {
         // MARK: STEP 15: Resume Game
         // Restart the timer when view reappear.
         
-        // MARK: >> Your Code Here <<
+        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
     }
     
     func getNextQuestion() {
@@ -243,9 +246,21 @@ class MainVC: UIViewController {
         // the instruction here is intentionally vague, so read the spec
         // and take some time to plan. you may need
         // to come back and rework this step later on.
-        getNextQuestion()
+        currTime -= 1
+        if currTime == 0 {
+            currTime = 8
+            timer?.invalidate()
+            streak = 0
+            lastThree[numAnswered%3] = "Incorrect"
+            numAnswered+=1
+            getNextQuestion()
+            timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerCallback), userInfo: nil, repeats: true)
+        }
     }
     
+    @objc func stopTimer() {
+        timer2?.invalidate()
+    }
     
     @objc func didTapAnswer(_ sender: UIButton) {
         // MARK: STEP 9: Buttons' Logic
@@ -258,22 +273,38 @@ class MainVC: UIViewController {
         // and rework this step later on.
         //
         // Hint: You can use `sender.tag` to identify which button is tapped
+        timer?.invalidate()
         if sender.tag == correct {
-            score = score + 1
-            streak+=1
-            lastThree[numAnswered%3] = "Correct"
-            numAnswered+=1
+            sender.backgroundColor = .systemGreen
+        } else {
+            sender.backgroundColor = .systemRed
         }
         
-        streak = 0
-        lastThree[numAnswered%3] = "Incorrect"
-        numAnswered+=1
-        getNextQuestion()
-        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            if sender.tag == self.correct {
+                self.score = self.score + 1
+                self.streak+=1
+                self.lastThree[self.numAnswered%3] = "Correct"
+                self.numAnswered+=1
+                self.scoreLabel.text = "Score: " + String(self.score)
+            } else {
+                self.streak = 0
+                self.lastThree[self.numAnswered%3] = "Incorrect"
+                self.numAnswered+=1
+            }
+            sender.backgroundColor = UIColor.systemGray
+            self.getNextQuestion()
+            self.currTime = 8
+            self.timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.timerCallback), userInfo: nil, repeats: true)
+        }
         
     }
     
     @objc func didTapStats(_ sender: UIButton) {
+        
+        timer?.invalidate()
+        
+        currTime = 8
         
         let vc = StatsVC(data: "Hello")
         
@@ -283,11 +314,13 @@ class MainVC: UIViewController {
         
         vc.lastThree = lastThree
         
+        vc.numAnswered = numAnswered
+        
         // MARK: STEP 13: StatsVC Data
         // Follow instructions in StatsVC. You also need to invalidate
         // the timer instance to pause game before going to StatsVC.
         
-        // MARK: >> Your Code Here <<
+        vc.modalPresentationStyle = .fullScreen
         
         present(vc, animated: true, completion: nil)
     }

@@ -22,6 +22,7 @@ class StatsVC: UIViewController {
     var dataWeNeedExample1: String!
     var streak: Int!
     var lastThree: [String]!
+    var numAnswered: Int!
     //
     // Check didTapStats in MainVC.swift on how to use it.
     //
@@ -79,9 +80,9 @@ class StatsVC: UIViewController {
         // == UIColor.darkGray
         label.textColor = .darkGray
         
-//        let stringtemp = String(streak)
+//        label.text = String("\(streak)")
         
-//        label.text = stringtemp
+        label.text = "Longest Streak: 0"
         
         // == NSTextAlignment(expected type).center
         label.textAlignment = .center
@@ -95,9 +96,80 @@ class StatsVC: UIViewController {
         return label
     }()
     
+    private let lastThreeLabel: UILabel = {
+        let label = UILabel()
+        
+        // == UIColor.darkGray
+        label.textColor = .darkGray
+        
+        
+//        label.text = lastThree[0] + ", " + lastThree[1] + ", " + lastThree[2]
+        
+        label.text = "Sample, Last, Three"
+        
+        // == NSTextAlignment(expected type).center
+        label.textAlignment = .center
+        
+        // == UIFont.systemFont(ofSize: 27, UIFont.weight.medium)
+        label.font = .systemFont(ofSize: 27, weight: .medium)
+        
+        // Must have if you are using constraints
+        label.translatesAutoresizingMaskIntoConstraints = false
+        
+        return label
+    }()
+    
+    private let dismissButton: UIButton = {
+        let button = UIButton()
+        
+        button.setTitle("Dismiss", for: .normal)
+        
+        button.setTitleColor(.black, for: .normal)
+        
+        button.backgroundColor = .systemBlue
+
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        return button
+    }()
+    
+    
     override func viewDidLoad() {
+        view.backgroundColor = .white
         super.viewDidLoad()
         
+        streakLabel.text = "Longest Streak: " + String(streak)
+        lastThreeLabel.text = lastThree[numAnswered % 3] + ", " + lastThree[(numAnswered + 1) % 3] + ", " + lastThree[(numAnswered + 2) % 3]
+        
         view.addSubview(streakLabel)
+        
+        NSLayoutConstraint.activate([
+            streakLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 100),
+            streakLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+        ])
+        
+        view.addSubview(lastThreeLabel)
+        NSLayoutConstraint.activate([
+            lastThreeLabel.topAnchor.constraint(equalTo: streakLabel.bottomAnchor, constant: 100),
+            lastThreeLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+        
+        view.addSubview(dismissButton)
+        
+        NSLayoutConstraint.activate([
+            dismissButton.topAnchor.constraint(equalTo: lastThreeLabel.bottomAnchor, constant: 100),
+            
+            dismissButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            ])
+        
+        dismissButton.addTarget(self, action: #selector(didTapDismiss(_:)), for: .touchUpInside)
+
+    }
+    
+    @objc func didTapDismiss(_ sender: UIButton) {
+//        let vc = MainVC()
+        
+        dismiss(animated: true, completion: nil)
+        
     }
 }
