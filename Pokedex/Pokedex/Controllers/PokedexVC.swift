@@ -136,7 +136,7 @@ extension PokedexVC: UICollectionViewDelegateFlowLayout {
         let pokemonName = pokemons[indexPath.item]
         let VC = PokemonPreviewVC(pokemonName: pokemonName)
         
-//        self.navigationController?.pushViewController(VC, animated: true)
+        self.navigationController?.pushViewController(VC, animated: true)
     }
 }
 
