@@ -19,7 +19,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window?.windowScene = windowScene
         self.window?.makeKeyAndVisible()
-        
         let navViewController = UINavigationController(rootViewController: PokedexVC())
         window?.rootViewController = navViewController
     }
