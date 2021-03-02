@@ -11,12 +11,11 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
     
     let searchController = UISearchController(searchResultsController: nil)
     
-    var numPerRow = 3
+    var numPerRow: CGFloat = 0.33
     
     let pokemons = PokemonGenerator.shared.getPokemonArray()
     
     var filteredPokemons: [Pokemon]?
-    
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -28,10 +27,27 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         return collectionView
     }()
     
+    let filterButton: UIButton = {
+        let button = UIButton()
+        button.backgroundColor = .systemGray
+        button.setTitle("Filter", for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(handleFilter), for: .touchUpInside)
+        
+        return button
+    }()
+    
+    @objc func handleFilter(sender: UIButton) {
+        //create a new vc, add it to navigationController, and send it to that screen
+        //in that vc take the buttons array of booleans and display buttons
+        //based on what buttons are clicked return booleans
+        //take booleans and set filter criteria along with search criteria
+    }
+    
     lazy var toggleBT: UIButton = {
 
         let button = UIButton()
-        button.frame = CGRect(x: 40, y: 100, width: 200, height: 40)
+        button.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
         button.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
         button.isSelected = false
         button.setTitle("Grid", for: .normal)
@@ -49,7 +65,7 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
 
         if sender.isSelected {
 
-            numPerRow = 2
+            numPerRow = 0.8
             sender.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
             sender.setTitleColor(.black, for: .normal)
             toggleBT.setTitle("Rows", for: .normal)
@@ -57,7 +73,7 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
 
         else {
 
-            numPerRow = 3
+            numPerRow = 0.33
             sender.backgroundColor = #colorLiteral(red: 0.2392156869, green: 0.6745098233, blue: 0.9686274529, alpha: 1)
             sender.setTitleColor(.white, for: .normal)
             toggleBT.setTitle("Grid", for: .normal)
@@ -68,6 +84,7 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateSearchResults(for: searchController)
 //
 //        filteredPokemons = pokemons
 //        searchController.searchResultsUpdater = self
@@ -78,11 +95,11 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         navigationItem.searchController = searchController
         searchController.searchBar.delegate = self
         
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
         
         view.addSubview(toggleBT)
         view.addSubview(collectionView)
-        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 88, left: 30, bottom: 0, right: 30))
+        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 200, left: 30, bottom: 0, right: 30))
         
         collectionView.allowsSelection = true
         collectionView.allowsMultipleSelection = false
@@ -91,7 +108,7 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         collectionView.delegate = self
         
         NSLayoutConstraint.activate([
-            toggleBT.topAnchor.constraint(equalTo: view.topAnchor, constant: 50),
+            toggleBT.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             toggleBT.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
         ])
 
@@ -99,30 +116,49 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-        //searchTest is what you gotta search for
+        updateSearchResults(for: searchController)
+    }
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        if let searchText = searchController.searchBar.text, !searchText.isEmpty {
+            filteredPokemons = pokemons.filter { pokemon in
+                return pokemon.name.lowercased().contains(searchText.lowercased())
+            }
+            
+        } else {
+            filteredPokemons = pokemons
+        }
+        collectionView.reloadData()
     }
     
 }
 
 extension PokedexVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return pokemons.count
+        guard let pokeLeft = filteredPokemons else {
+            return 0
+        }
+        return pokeLeft.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PokemonCollectionCell.reuseIdentifier, for: indexPath) as! PokemonCollectionCell
-        cell.pokemonName = pokemons[indexPath.item]
+        if let pokeLeft = filteredPokemons {
+            let pokemonName = pokeLeft[indexPath.item]
+            cell.pokemonName = pokemonName
+        }
+        
         return cell
     }
 }
 
 extension PokedexVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: Int(UIScreen.main.bounds.width) / numPerRow, height: 100)
+        return CGSize(width: Int(UIScreen.main.bounds.width * numPerRow), height: 100)
     }
     
     func collectionView(_ collectionView: UICollectionView, contextMenuConfigurationForItemAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
-        let pokemonName = pokemons[indexPath.item]
+        let pokemonName = filteredPokemons![indexPath.item]
         
         return UIContextMenuConfiguration(identifier: indexPath as NSCopying, previewProvider: {
             return PokemonPreviewVC(pokemonName: pokemonName)
@@ -133,7 +169,7 @@ extension PokedexVC: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let pokemonName = pokemons[indexPath.item]
+        let pokemonName = filteredPokemons![indexPath.item]
         let VC = PokemonPreviewVC(pokemonName: pokemonName)
         
         self.navigationController?.pushViewController(VC, animated: true)

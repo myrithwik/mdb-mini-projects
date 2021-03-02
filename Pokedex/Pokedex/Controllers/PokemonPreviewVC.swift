@@ -33,18 +33,18 @@ class PokemonPreviewVC: UIViewController {
         view.addSubview(speedView)
         view.addSubview(totalView)
 //        view.addSubview(typeView)
-        view.backgroundColor = .clear
+        view.backgroundColor = .white
 
 
-        nameView.textColor = .white
-        idView.textColor = .white
-        attackView.textColor = .white
-        defenseView.textColor = .white
-        healthView.textColor = .white
-        spAttackView.textColor = .white
-        spDefenseView.textColor = .white
-        speedView.textColor = .white
-        totalView.textColor = .white
+//        nameView.textColor = .white
+//        idView.textColor = .white
+//        attackView.textColor = .white
+//        defenseView.textColor = .white
+//        healthView.textColor = .white
+//        spAttackView.textColor = .white
+//        spDefenseView.textColor = .white
+//        speedView.textColor = .white
+//        totalView.textColor = .white
 //        typeView.textColor = .white
 
         let width = 110
@@ -113,6 +113,7 @@ class PokemonPreviewVC: UIViewController {
         spDefenseView.text = "Special Defense: " + String(pokemonName.specialDefense)
         speedView.text = "Speed: " + String(pokemonName.speed)
         totalView.text = "Total: " + String(pokemonName.total)
+        print(pokemonName.types)
         
 //        statsView.text = "Name: " + pokemonName.name + "\n" + "ID: " + String(pokemonName.id) + "\n" + "Types: " + pokemonName.types + "\n"
     }
