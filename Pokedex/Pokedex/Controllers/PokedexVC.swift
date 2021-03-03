@@ -17,6 +17,27 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
     
     var filteredPokemons: [Pokemon]?
     
+    var typeFilters: [PokeType]?
+//    var pokeTypes = [PokeType.Bug, PokeType.Dark]
+//        
+//        [Bug, case Grass, case Dark, case Ground, case Dragon, case Ice, case Electric, case Normal, case Fairy, case Poison, case Fighting, case Psychic, case Fire, case Rock, case Flying, case Steel, case Ghost, case Water, case Unknown]
+    
+//    init() {
+//        super.init(nibName: nil, bundle: nil)
+//    }
+    init() {
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    init(inputFilters: Array<PokeType>) {
+        typeFilters = inputFilters
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 30
@@ -34,14 +55,17 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         button.titleLabel?.font = .boldSystemFont(ofSize: 14)
         button.addTarget(self, action: #selector(handleFilter), for: .touchUpInside)
         
+        button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
     
     @objc func handleFilter(sender: UIButton) {
+        let VC = FilterVCViewController()
+        self.navigationController?.pushViewController(VC, animated: true)
         //create a new vc, add it to navigationController, and send it to that screen
-        //in that vc take the buttons array of booleans and display buttons
-        //based on what buttons are clicked return booleans
-        //take booleans and set filter criteria along with search criteria
+        //in that vc take the filtersArray and display buttons
+        //based on what buttons are clicked return type filters
+        //create another initializer that takes in the filters in Pokedex
     }
     
     lazy var toggleBT: UIButton = {
@@ -98,6 +122,7 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         view.backgroundColor = .white
         
         view.addSubview(toggleBT)
+        view.addSubview(filterButton)
         view.addSubview(collectionView)
         collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 200, left: 30, bottom: 0, right: 30))
         
@@ -109,7 +134,9 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         
         NSLayoutConstraint.activate([
             toggleBT.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            toggleBT.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+            toggleBT.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            filterButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            filterButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20)
         ])
 
         // Do any additional setup after loading the view.
@@ -127,6 +154,13 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
             
         } else {
             filteredPokemons = pokemons
+        }
+        if typeFilters != nil, (typeFilters?.count != 0) {
+            filteredPokemons = filteredPokemons!.filter { pokemon in
+                let setTypeFilters = Set(arrayLiteral: typeFilters!)
+                let setPokeType = NSSet(array: pokemon.types)
+                return setPokeType.isSubset(of: setTypeFilters)
+            }
         }
         collectionView.reloadData()
     }

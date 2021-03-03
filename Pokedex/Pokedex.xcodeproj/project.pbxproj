@@ -18,6 +18,7 @@
 		1ADFEA1425DF9999003D8D69 /* PokemonGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1ADFEA1325DF9999003D8D69 /* PokemonGenerator.swift */; };
 		F13A1C8C25E705F4007EFA61 /* PokemonCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13A1C8B25E705F4007EFA61 /* PokemonCollectionCell.swift */; };
 		F13A1C8F25EAC783007EFA61 /* PokemonPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F13A1C8E25EAC783007EFA61 /* PokemonPreviewVC.swift */; };
+		F1FEA29125EEE7720069B61F /* FilterVCViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1FEA29025EEE7720069B61F /* FilterVCViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -34,6 +35,7 @@
 		1ADFEA1325DF9999003D8D69 /* PokemonGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonGenerator.swift; sourceTree = "<group>"; };
 		F13A1C8B25E705F4007EFA61 /* PokemonCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonCollectionCell.swift; sourceTree = "<group>"; };
 		F13A1C8E25EAC783007EFA61 /* PokemonPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PokemonPreviewVC.swift; sourceTree = "<group>"; };
+		F1FEA29025EEE7720069B61F /* FilterVCViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterVCViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -51,6 +53,7 @@
 			isa = PBXGroup;
 			children = (
 				1ADFE9F925DF97D6003D8D69 /* PokedexVC.swift */,
+				F1FEA29025EEE7720069B61F /* FilterVCViewController.swift */,
 				F13A1C8E25EAC783007EFA61 /* PokemonPreviewVC.swift */,
 				F13A1C8B25E705F4007EFA61 /* PokemonCollectionCell.swift */,
 			);
@@ -190,6 +193,7 @@
 				1ADFEA0E25DF98BC003D8D69 /* Pokemon.swift in Sources */,
 				1ADFE9F625DF97D6003D8D69 /* AppDelegate.swift in Sources */,
 				F13A1C8F25EAC783007EFA61 /* PokemonPreviewVC.swift in Sources */,
+				F1FEA29125EEE7720069B61F /* FilterVCViewController.swift in Sources */,
 				1ADFE9F825DF97D6003D8D69 /* SceneDelegate.swift in Sources */,
 				F13A1C8C25E705F4007EFA61 /* PokemonCollectionCell.swift in Sources */,
 			);
