@@ -18,6 +18,7 @@
 		1A58EB0D25E48DB60086CC48 /* SFSymbol.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58EB0C25E48DB60086CC48 /* SFSymbol.swift */; };
 		1A58EB1825E490D70086CC48 /* SwiftyJSON in Frameworks */ = {isa = PBXBuildFile; productRef = 1A58EB1725E490D70086CC48 /* SwiftyJSON */; };
 		1A58EB2A25E4A0790086CC48 /* SymbolPreviewVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A58EB2925E4A0790086CC48 /* SymbolPreviewVC.swift */; };
+		F14181DA25E4C54E00B45F3B /* SymbolCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14181D925E4C54E00B45F3B /* SymbolCollectionCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +34,7 @@
 		1A58EB0825E48D780086CC48 /* SymbolProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolProvider.swift; sourceTree = "<group>"; };
 		1A58EB0C25E48DB60086CC48 /* SFSymbol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SFSymbol.swift; sourceTree = "<group>"; };
 		1A58EB2925E4A0790086CC48 /* SymbolPreviewVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolPreviewVC.swift; sourceTree = "<group>"; };
+		F14181D925E4C54E00B45F3B /* SymbolCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymbolCollectionCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -107,6 +109,7 @@
 			isa = PBXGroup;
 			children = (
 				1A58EAF125E48B0E0086CC48 /* CollectionVC.swift */,
+				F14181D925E4C54E00B45F3B /* SymbolCollectionCell.swift */,
 				1A58EB2925E4A0790086CC48 /* SymbolPreviewVC.swift */,
 			);
 			path = SymbolCollection;
@@ -201,6 +204,7 @@
 				1A58EB0925E48D780086CC48 /* SymbolProvider.swift in Sources */,
 				1A58EB2A25E4A0790086CC48 /* SymbolPreviewVC.swift in Sources */,
 				1A58EAF225E48B0E0086CC48 /* CollectionVC.swift in Sources */,
+				F14181DA25E4C54E00B45F3B /* SymbolCollectionCell.swift in Sources */,
 				1A58EB0D25E48DB60086CC48 /* SFSymbol.swift in Sources */,
 				1A58EAEE25E48B0E0086CC48 /* AppDelegate.swift in Sources */,
 				1A58EAF025E48B0E0086CC48 /* SceneDelegate.swift in Sources */,
