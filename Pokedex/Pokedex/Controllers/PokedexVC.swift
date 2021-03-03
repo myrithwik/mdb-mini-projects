@@ -18,25 +18,17 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
     var filteredPokemons: [Pokemon]?
     
     var typeFilters: [PokeType]?
-//    var pokeTypes = [PokeType.Bug, PokeType.Dark]
-//        
-//        [Bug, case Grass, case Dark, case Ground, case Dragon, case Ice, case Electric, case Normal, case Fairy, case Poison, case Fighting, case Psychic, case Fire, case Rock, case Flying, case Steel, case Ghost, case Water, case Unknown]
-    
-//    init() {
-//        super.init(nibName: nil, bundle: nil)
-//    }
-    init() {
-        super.init(nibName: nil, bundle: nil)
-    }
     
     init(inputFilters: Array<PokeType>) {
-        typeFilters = inputFilters
+        self.typeFilters = inputFilters
         super.init(nibName: nil, bundle: nil)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+//        fatalError("init(coder:) has not been implemented")
     }
+
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -157,9 +149,17 @@ class PokedexVC: UIViewController, UISearchBarDelegate {
         }
         if typeFilters != nil, (typeFilters?.count != 0) {
             filteredPokemons = filteredPokemons!.filter { pokemon in
-                let setTypeFilters = Set(arrayLiteral: typeFilters!)
-                let setPokeType = NSSet(array: pokemon.types)
-                return setPokeType.isSubset(of: setTypeFilters)
+                for pokeType in typeFilters! {
+                    if !pokemon.types.contains(pokeType) {
+                        return false
+                    }
+                }
+                return true
+//                let setTypeFilters = NSSet(arrayLiteral: typeFilters!)
+//                let setPokeType = NSSet(array: pokemon.types)
+//                print(setPokeType)
+//                print(setTypeFilters)
+//                return setTypeFilters.isSubset(of: setPokeType as! Set<AnyHashable>)
             }
         }
         collectionView.reloadData()

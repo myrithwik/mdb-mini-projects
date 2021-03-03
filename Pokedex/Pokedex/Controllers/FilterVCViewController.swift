@@ -9,7 +9,7 @@ import UIKit
 
 class FilterVCViewController: UIViewController {
     
-    var typeFilters: [PokeType]?
+    var typeFilters = [PokeType]()
     
     var typeNames = ["Bug", "Dark", "Dragon", "Electric", "Fairy", "Fighting", "Fire", "Flying", "Ghost", "Grass", "Ground", "Ice", "Normal", "Poison", "Psychic", "Rock", "Steel", "Water"]
 
@@ -145,63 +145,65 @@ class FilterVCViewController: UIViewController {
     }
     
     @objc func submit(_ sender: UIButton) {
-        let VC = PokedexVC(inputFilters: typeFilters!)
+        let VC = PokedexVC(inputFilters: typeFilters)
+        
+        self.navigationController?.pushViewController(VC, animated: true)
     }
     
     @objc func didTapAnswer(_ sender: UIButton) {
         if (sender.tag == 0) {
-            typeFilters?.append(PokeType.Bug)
+            typeFilters.append(PokeType.Bug)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 1) {
-            typeFilters?.append(PokeType.Dark)
+            typeFilters.append(PokeType.Dark)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 2) {
-            typeFilters?.append(PokeType.Dragon)
+            typeFilters.append(PokeType.Dragon)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 3) {
-            typeFilters?.append(PokeType.Electric)
+            typeFilters.append(PokeType.Electric)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 4) {
-            typeFilters?.append(PokeType.Fairy)
+            typeFilters.append(PokeType.Fairy)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 5) {
-            typeFilters?.append(PokeType.Fighting)
+            typeFilters.append(PokeType.Fighting)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 6) {
-            typeFilters?.append(PokeType.Fire)
+            typeFilters.append(PokeType.Fire)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 7) {
-            typeFilters?.append(PokeType.Flying)
+            typeFilters.append(PokeType.Flying)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 8) {
-            typeFilters?.append(PokeType.Ghost)
+            typeFilters.append(PokeType.Ghost)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 9) {
-            typeFilters?.append(PokeType.Grass)
+            typeFilters.append(PokeType.Grass)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 10) {
-            typeFilters?.append(PokeType.Ground)
+            typeFilters.append(PokeType.Ground)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 11) {
-            typeFilters?.append(PokeType.Ice)
+            typeFilters.append(PokeType.Ice)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 12) {
-            typeFilters?.append(PokeType.Normal)
+            typeFilters.append(PokeType.Normal)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 13) {
-            typeFilters?.append(PokeType.Poison)
+            typeFilters.append(PokeType.Poison)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 14) {
-            typeFilters?.append(PokeType.Psychic)
+            typeFilters.append(PokeType.Psychic)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 15) {
-            typeFilters?.append(PokeType.Rock)
+            typeFilters.append(PokeType.Rock)
             sender.backgroundColor = .systemGreen
-        }else if (sender.tag == 16) {
-            typeFilters?.append(PokeType.Steel)
+        } else if (sender.tag == 16) {
+            typeFilters.append(PokeType.Steel)
             sender.backgroundColor = .systemGreen
         } else if (sender.tag == 17) {
-            typeFilters?.append(PokeType.Water)
+            typeFilters.append(PokeType.Water)
             sender.backgroundColor = .systemGreen
         }
     }
