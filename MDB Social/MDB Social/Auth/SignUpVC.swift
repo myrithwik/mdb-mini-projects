@@ -145,6 +145,11 @@ class SignUpVC: UIViewController {
                             subtitle: "Please provide a password")
             return
         }
+        
+//        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+//          // ...
+//        }
+            
     }
         
         private func showErrorBanner(withTitle title: String, subtitle: String? = nil) {
