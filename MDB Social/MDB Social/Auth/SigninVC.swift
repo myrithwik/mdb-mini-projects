@@ -180,6 +180,7 @@ class SigninVC: UIViewController {
                     self?.showErrorBanner(withTitle: "Invalid email",
                                           subtitle: "Please check your email and try again")
                 default:
+                    print("default")
                     return
                 }
             }

@@ -7,6 +7,8 @@
 
 import UIKit
 import NotificationBannerSwift
+import FirebaseAuth
+import Firebase
 
 
 class SignUpVC: UIViewController {
@@ -124,6 +126,10 @@ class SignUpVC: UIViewController {
         // Do any additional setup after loading the view.
     }
     
+    func completion()->Void{
+        return
+    }
+    
     @objc func didTapSignUp(_ sender: UIButton) {
         guard let name = nameTextField.text, name != "" else {
             showErrorBanner(withTitle: "Missing Name",
@@ -146,9 +152,27 @@ class SignUpVC: UIViewController {
             return
         }
         
-//        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-//          // ...
-//        }
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            if let _eror = error {
+                //something bad happning
+                self.showErrorBanner(withTitle: "Error Signing Up",
+                                subtitle: _eror.localizedDescription)
+                print(_eror.localizedDescription )
+            }else {
+                var emptyEvents = [EventID] ()
+                let newUser = User(uid: authResult?.user.uid, username: username, email: email, fullname: name, savedEvents: emptyEvents)
+                FIRDatabaseRequest.shared.setUser(newUser, completion: {
+                    self.completion()
+                })
+                guard let window = UIApplication.shared
+                        .windows.filter({ $0.isKeyWindow }).first else { return }
+                let vc = UIStoryboard(name: "Main", bundle: nil).instantiateInitialViewController()
+                window.rootViewController = vc
+                let options: UIView.AnimationOptions = .transitionCrossDissolve
+                let duration: TimeInterval = 0.3
+                UIView.transition(with: window, duration: duration, options: options, animations: {}, completion: nil)
+            }
+        }
             
     }
         

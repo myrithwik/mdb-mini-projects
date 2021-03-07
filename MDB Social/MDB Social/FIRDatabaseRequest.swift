@@ -33,4 +33,24 @@ class FIRDatabaseRequest {
     }
     
     /* TODO: Events getter */
+    func getEvents()-> [Event] {
+        var events = [Event]()
+        
+        do {
+            try db.collection("events").getDocuments() { (querySnapshot, err) in
+                if let err = err {
+                    print("Error getting documents: \(err)")
+                } else {
+                    for document in querySnapshot!.documents {
+//                        print("\(document.documentID) => \(document.data())")
+                        try! events.append(document.data(as: Event.self)!)
+//                        events.append(document.data())
+                    }
+                }
+            }
+        } catch { }
+        
+        return events
+    }
+    
 }

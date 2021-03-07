@@ -335,7 +335,7 @@ PODS:
   - NotificationBannerSwift (3.0.6):
     - MarqueeLabel (~> 4.0.5)
     - SnapKit (~> 5.0.1)
-  - PromisesObjC (1.2.11)
+  - PromisesObjC (1.2.12)
   - SnapKit (5.0.1)
 
 DEPENDENCIES:
@@ -391,7 +391,7 @@ SPEC CHECKSUMS:
   MarqueeLabel: 00cc0bcd087111dca575878b3531af980559707d
   nanopb: 59317e09cf1f1a0af72f12af412d54edf52603fc
   NotificationBannerSwift: 7021be2338f8f29cf424b0aca43da462bf9e2a1a
-  PromisesObjC: 8c196f5a328c2cba3e74624585467a557dcb482f
+  PromisesObjC: 3113f7f76903778cf4a0586bd1ab89329a0b7b97
   SnapKit: 97b92857e3df3a0c71833cce143274bf6ef8e5eb
 
 PODFILE CHECKSUM: 31737ec5f6fcf310c5f4f529351949f76263beee
