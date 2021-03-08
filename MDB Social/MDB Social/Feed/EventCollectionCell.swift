@@ -12,9 +12,17 @@ class EventCollectionCell: UICollectionViewCell {
     
     var eventName: Event? {
         didSet {
-            guard let eventName = eventName else { return }
-            guard let url = URL(string: eventName.photoURL) else { return }
-            guard let data = try? Data(contentsOf: url) else { return }
+            guard let eventName = eventName else {
+                print("Couldn't find eventName")
+                return
+            }
+            guard let url = URL(string: eventName.photoURL) else { print("couldn't define url")
+                return
+            }
+            guard let data = try? Data(contentsOf: url) else {
+                print("couldn't define data")
+                return
+            }
             let image: UIImage = UIImage(data: data)!
             imageView.image = image
             nameView.text = "Event Name: " + eventName.name
