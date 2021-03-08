@@ -8,15 +8,29 @@
 import UIKit
 
 class FeedVC: UIViewController {
+        
+//    var events = [Event]()
     
-    let events = FIRDatabaseRequest.shared.getEvents()
+    func startEvents (){
+        FIRDatabaseRequest.shared.getEvents(reloadFeed: reloadFeed)
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+//            self.collectionView.reloadData()
+//            print("Events: \(FIRDatabaseRequest.shared.events)")
+//            return
+//        }
+    }
+    
+    func reloadFeed() {
+        collectionView.reloadData()
+        print(FIRDatabaseRequest.shared.events)
+    }
     
     let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.minimumLineSpacing = 30
         layout.minimumInteritemSpacing = 30
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-        collectionView.backgroundColor = .black
+        collectionView.backgroundColor = .clear
         collectionView.register(EventCollectionCell.self, forCellWithReuseIdentifier: EventCollectionCell.reuseIdentifier)
         return collectionView
     }()
@@ -35,6 +49,7 @@ class FeedVC: UIViewController {
     }()
     
     override func viewDidLoad() {
+        startEvents()
         view.addSubview(signOutButton)
         view.addSubview(collectionView)
         collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 200, left: 30, bottom: 0, right: 30))
@@ -66,12 +81,12 @@ class FeedVC: UIViewController {
 
 extension FeedVC: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return events.count
+        return FIRDatabaseRequest.shared.events.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: EventCollectionCell.reuseIdentifier, for: indexPath) as! EventCollectionCell
-        let eventName  = events[indexPath.item]
+        let eventName  = FIRDatabaseRequest.shared.events[indexPath.item]
         cell.eventName = eventName
         return cell
     }

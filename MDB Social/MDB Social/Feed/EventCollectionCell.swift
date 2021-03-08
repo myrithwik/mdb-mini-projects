@@ -13,11 +13,11 @@ class EventCollectionCell: UICollectionViewCell {
     var eventName: Event? {
         didSet {
             guard let eventName = eventName else { return }
-//            guard let url = URL(string: eventName.photoURL) else { return }
-//            guard let data = try? Data(contentsOf: url) else { return }
-//            let image: UIImage = UIImage(data: data)!
-//            imageView.image = image
-//            nameView.text = "Event Name: " + eventName.name
+            guard let url = URL(string: eventName.photoURL) else { return }
+            guard let data = try? Data(contentsOf: url) else { return }
+            let image: UIImage = UIImage(data: data)!
+            imageView.image = image
+            nameView.text = "Event Name: " + eventName.name
             posterView.text = "Posted By: " + String(eventName.creator) //Have to change this to user name
             rsvpView.text = "Number RSVP'd: " + String(eventName.rsvpUsers.count)
             print("set")
@@ -68,24 +68,24 @@ class EventCollectionCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-//        contentView.addSubview(imageView)
+        contentView.addSubview(imageView)
         contentView.addSubview(nameView)
         contentView.addSubview(posterView)
-//        contentView.addSubview(rsvpView)
+        contentView.addSubview(rsvpView)
         
         NSLayoutConstraint.activate([
             posterView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-            posterView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            posterView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 20),
             
-            nameView.leadingAnchor.constraint(equalTo: posterView.trailingAnchor, constant: 10),
-            nameView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 5),
+            nameView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            nameView.topAnchor.constraint(equalTo: posterView.topAnchor, constant: 20),
             
-//            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-//            imageView.topAnchor.constraint(equalTo: posterView.bottomAnchor, constant: 10),
-//            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            imageView.topAnchor.constraint(equalTo: nameView.bottomAnchor, constant: 20),
+            imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
 //
-//            rsvpView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
-//            rsvpView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: -5)
+            rsvpView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            rsvpView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20)
         ])
     }
     

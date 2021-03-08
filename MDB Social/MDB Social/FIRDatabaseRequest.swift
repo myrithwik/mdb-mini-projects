@@ -14,6 +14,8 @@ class FIRDatabaseRequest {
     
     let db = Firestore.firestore()
     
+    var events = [Event]()
+    
     func setUser(_ user: User, completion: (()->Void)?) {
         guard let uid = user.uid else { return }
         do {
@@ -33,8 +35,7 @@ class FIRDatabaseRequest {
     }
     
     /* TODO: Events getter */
-    func getEvents()-> [Event] {
-        var events = [Event]()
+    func getEvents(reloadFeed: @escaping () -> Void) {
         
         do {
             try db.collection("events").getDocuments() { (querySnapshot, err) in
@@ -43,14 +44,20 @@ class FIRDatabaseRequest {
                 } else {
                     for document in querySnapshot!.documents {
 //                        print("\(document.documentID) => \(document.data())")
-                        try! events.append(document.data(as: Event.self)!)
+                        try! self.events.append(document.data(as: Event.self)!)
+//                        print("Events2: \(self.events)")
+                        
+//                        print("In do: \(events)")
 //                        events.append(document.data())
                     }
+                    reloadFeed()
                 }
             }
         } catch { }
-        
-        return events
+
+//        print("Events: \(self.events)")
+//        print("Out of Do: \(events)")
+//        return events
     }
     
 }
