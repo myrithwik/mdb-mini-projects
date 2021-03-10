@@ -38,12 +38,13 @@ class FIRDatabaseRequest {
     func getEvents(reloadFeed: @escaping () -> Void) {
         
         do {
-            try db.collection("events").getDocuments() { (querySnapshot, err) in
+            try db.collection("events").getDocuments() { [weak self] (querySnapshot, err) in
                 if let err = err {
                     print("Error getting documents: \(err)")
                 } else {
                     for document in querySnapshot!.documents {
 //                        print("\(document.documentID) => \(document.data())")
+                        guard let self = self else { return }
                         try! self.events.append(document.data(as: Event.self)!)
 //                        print("Events2: \(self.events)")
                         
@@ -58,6 +59,10 @@ class FIRDatabaseRequest {
 //        print("Events: \(self.events)")
 //        print("Out of Do: \(events)")
 //        return events
+    }
+    
+    func clearEvents() {
+        events = [Event]()
     }
     
 }

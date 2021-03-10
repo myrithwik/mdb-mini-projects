@@ -120,7 +120,7 @@ class SignUpVC: UIViewController {
         
         signUpButton.layer.cornerRadius = signUpButtonHeight / 2
         
-        signUpButton.addTarget(self, action: #selector(didTapSignUp(_:)), for: .touchUpInside)
+        signUpButton.addTarget(self, action: #selector(didTapSignUp1(_:)), for: .touchUpInside)
         
 
         // Do any additional setup after loading the view.
@@ -130,7 +130,7 @@ class SignUpVC: UIViewController {
         return
     }
     
-    @objc func didTapSignUp(_ sender: UIButton) {
+    @objc func didTapSignUp1(_ sender: UIButton) {
         guard let name = nameTextField.text, name != "" else {
             showErrorBanner(withTitle: "Missing Name",
                             subtitle: "Please provide a Name")

@@ -6,9 +6,12 @@
 //
 
 import UIKit
+import FirebaseFirestore
 
 class EventCollectionCell: UICollectionViewCell {
     static let reuseIdentifier: String = String(describing: EventCollectionCell.self)
+
+    let db = Firestore.firestore()
     
     var eventName: Event? {
         didSet {
@@ -16,17 +19,37 @@ class EventCollectionCell: UICollectionViewCell {
                 print("Couldn't find eventName")
                 return
             }
-            guard let url = URL(string: eventName.photoURL) else { print("couldn't define url")
-                return
+            let userListener = db.collection("users").document(eventName.creator).addSnapshotListener { [weak self] docSnapshot, error in
+                guard let document = docSnapshot else {
+                    print("Error finding docSnapshot")
+                    return
+                }
+                guard let user = try? document.data(as: User.self) else {
+                    print("Error opening user data")
+                    return
+                }
+                self?.posterView.text = "Posted By: " + String(user.fullname) //Have to change this to user name
             }
-            guard let data = try? Data(contentsOf: url) else {
-                print("couldn't define data")
-                return
+            let gsReference = FIRStorage.shared.storage.reference(forURL: eventName.photoURL)
+            gsReference.getData(maxSize: 25*32*32) { (data, error) in
+                if let error = error {
+                    print(error)
+                } else {
+                    self.imageView.image = UIImage(data: data!) ?? UIImage()
+                }
             }
-            let image: UIImage = UIImage(data: data)!
-            imageView.image = image
+            
+//            guard let url = URL(string: eventName.photoURL) else { print("couldn't define url")
+//                return
+//            }
+//            guard let data = try? Data(contentsOf: url) else {
+//                print("couldn't define data")
+//                return
+//            }
+//            let image: UIImage = UIImage(data: data)!
+//            imageView.image = image
             nameView.text = "Event Name: " + eventName.name
-            posterView.text = "Posted By: " + String(eventName.creator) //Have to change this to user name
+//            posterView.text = "Posted By: " + String(user1.fullname) //Have to change this to user name
             rsvpView.text = "Number RSVP'd: " + String(eventName.rsvpUsers.count)
             print("set")
         }
@@ -91,6 +114,7 @@ class EventCollectionCell: UICollectionViewCell {
             imageView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             imageView.topAnchor.constraint(equalTo: nameView.bottomAnchor, constant: 20),
             imageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
+            imageView.heightAnchor.constraint(equalToConstant: 100),
 //
             rsvpView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
             rsvpView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 20)

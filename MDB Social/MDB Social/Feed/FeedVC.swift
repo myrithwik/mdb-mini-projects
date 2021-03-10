@@ -22,7 +22,7 @@ class FeedVC: UIViewController {
     
     func reloadFeed() {
         collectionView.reloadData()
-        print(FIRDatabaseRequest.shared.events)
+//        print(FIRDatabaseRequest.shared.events)
     }
     
     let collectionView: UICollectionView = {
@@ -52,7 +52,7 @@ class FeedVC: UIViewController {
         startEvents()
         view.addSubview(signOutButton)
         view.addSubview(collectionView)
-        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 200, left: 30, bottom: 0, right: 30))
+        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 150, left: 30, bottom: 0, right: 30))
         
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -67,10 +67,12 @@ class FeedVC: UIViewController {
     }
     
     @objc func didTapSignOut(_ sender: UIButton) {
+        FIRDatabaseRequest.shared.clearEvents()
         FIRAuthProvider.shared.signOut {
             guard let window = UIApplication.shared
                     .windows.filter({ $0.isKeyWindow }).first else { return }
-            let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController()
+//            let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController()
+            let vc = SigninVC()
             window.rootViewController = vc
             let options: UIView.AnimationOptions = .transitionCrossDissolve
             let duration: TimeInterval = 0.3
@@ -94,6 +96,6 @@ extension FeedVC: UICollectionViewDataSource {
 
 extension FeedVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: 100, height: 100)
+        return CGSize(width: view.bounds.width - 100, height: 300)
     }
 }

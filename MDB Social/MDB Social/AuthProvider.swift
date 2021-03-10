@@ -39,7 +39,6 @@ class FIRAuthProvider {
     
     func signIn(withEmail email: String, password: String,
                 completion: ((Result<User, SignInErrors>)->Void)?) {
-        
         auth.signIn(withEmail: email, password: password) { [weak self] authResult, error in
             if let error = error {
                 let nsError = error as NSError
