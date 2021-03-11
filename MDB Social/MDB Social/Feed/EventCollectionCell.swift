@@ -31,23 +31,13 @@ class EventCollectionCell: UICollectionViewCell {
                 self?.posterView.text = "Posted By: " + String(user.fullname) //Have to change this to user name
             }
             let gsReference = FIRStorage.shared.storage.reference(forURL: eventName.photoURL)
-            gsReference.getData(maxSize: 25*32*32) { (data, error) in
+            gsReference.getData(maxSize: 25*1024*1024) { (data, error) in
                 if let error = error {
                     print(error)
                 } else {
                     self.imageView.image = UIImage(data: data!) ?? UIImage()
                 }
             }
-            
-//            guard let url = URL(string: eventName.photoURL) else { print("couldn't define url")
-//                return
-//            }
-//            guard let data = try? Data(contentsOf: url) else {
-//                print("couldn't define data")
-//                return
-//            }
-//            let image: UIImage = UIImage(data: data)!
-//            imageView.image = image
             nameView.text = "Event Name: " + eventName.name
 //            posterView.text = "Posted By: " + String(user1.fullname) //Have to change this to user name
             rsvpView.text = "Number RSVP'd: " + String(eventName.rsvpUsers.count)

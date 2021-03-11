@@ -29,6 +29,7 @@
 		1AF3868125E88AA20006AE59 /* FIRDatabaseRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AF3868025E88AA20006AE59 /* FIRDatabaseRequest.swift */; };
 		88D1856E3E3B7E97C54E6FB3 /* Pods_MDB_Social.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E51BF3FE48C081C2540BE42E /* Pods_MDB_Social.framework */; };
 		F14F17B225F5577300218BEA /* EventCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F14F17B125F5577300218BEA /* EventCollectionCell.swift */; };
+		F162F30C25F8A66600948596 /* Storage.swift in Sources */ = {isa = PBXBuildFile; fileRef = F162F30B25F8A66600948596 /* Storage.swift */; };
 		F17E3A4425F0E1BE004D13C1 /* SignUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = F17E3A4325F0E1BE004D13C1 /* SignUpVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -59,6 +60,7 @@
 		BC2F19D1A2D8BB347835EFD1 /* Pods-MDB Social.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MDB Social.release.xcconfig"; path = "Target Support Files/Pods-MDB Social/Pods-MDB Social.release.xcconfig"; sourceTree = "<group>"; };
 		E51BF3FE48C081C2540BE42E /* Pods_MDB_Social.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MDB_Social.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F14F17B125F5577300218BEA /* EventCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventCollectionCell.swift; sourceTree = "<group>"; };
+		F162F30B25F8A66600948596 /* Storage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Storage.swift; sourceTree = "<group>"; };
 		F17E3A4325F0E1BE004D13C1 /* SignUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -154,6 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				1AF3864D25E83B850006AE59 /* FeedVC.swift */,
+				F162F30B25F8A66600948596 /* Storage.swift */,
 				F14F17B125F5577300218BEA /* EventCollectionCell.swift */,
 				1AF3865125E83C1A0006AE59 /* FeedNavigationVC.swift */,
 			);
@@ -308,6 +311,7 @@
 				1AF3865625E83E4E0006AE59 /* UIViewController+HideKeyboard.swift in Sources */,
 				1AF3862525E816540006AE59 /* User.swift in Sources */,
 				1AF3864E25E83B850006AE59 /* FeedVC.swift in Sources */,
+				F162F30C25F8A66600948596 /* Storage.swift in Sources */,
 				1AF385F625E812170006AE59 /* SigninVC.swift in Sources */,
 				1AF3865F25E855BE0006AE59 /* UIColor+ColorScheme.swift in Sources */,
 				1AF3864025E81A9E0006AE59 /* AuthProvider.swift in Sources */,

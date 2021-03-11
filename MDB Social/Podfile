@@ -9,8 +9,8 @@ target 'MDB Social' do
   pod 'Firebase/Auth'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
-
   pod 'NotificationBannerSwift', '~> 3.0.0'
+pod 'Firebase/Storage'
   # Pods for MDB Social
 
 end

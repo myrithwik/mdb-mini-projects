@@ -133,7 +133,6 @@ class SigninVC: UIViewController {
             signUpActionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20),
         ])
         signUpActionLabel.addTarget(self, action: #selector(didTapSignUp(_:)), for: .touchUpInside)
-        print("signUp done loading")
     }
 
     @objc func didTapSignIn(_ sender: UIButton) {
@@ -189,7 +188,6 @@ class SigninVC: UIViewController {
     
     @objc private func didTapSignUp(_ sender: UIButton) {
         let VC = SignUpVC()
-        print("tapped Sign Up")
         self.navigationController?.pushViewController(VC, animated: true)
     }
     

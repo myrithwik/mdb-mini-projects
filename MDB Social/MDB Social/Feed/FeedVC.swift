@@ -70,10 +70,14 @@ class FeedVC: UIViewController {
         FIRDatabaseRequest.shared.clearEvents()
         FIRAuthProvider.shared.signOut {
             guard let window = UIApplication.shared
-                    .windows.filter({ $0.isKeyWindow }).first else { return }
-//            let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController()
-            let vc = SigninVC()
-            window.rootViewController = vc
+                    .windows.filter({ $0.isKeyWindow }).first else {
+                print("Error setting window")
+                return
+            }
+            let vc = UIStoryboard(name: "Auth", bundle: nil).instantiateInitialViewController()
+            let navViewController = UINavigationController(rootViewController: vc!)
+//            let vc = SigninVC()
+            window.rootViewController = navViewController
             let options: UIView.AnimationOptions = .transitionCrossDissolve
             let duration: TimeInterval = 0.3
             UIView.transition(with: window, duration: duration, options: options, animations: {}, completion: nil)
