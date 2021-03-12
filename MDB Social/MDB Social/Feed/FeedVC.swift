@@ -48,22 +48,44 @@ class FeedVC: UIViewController {
         return btn
     }()
     
+    private let createButton: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+        btn.backgroundColor = .primary
+        btn.setTitle("New Event", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "...", size: 15)
+        btn.tintColor = .black
+        btn.layer.cornerRadius = 15
+        
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        
+        return btn
+    }()
+    
     override func viewDidLoad() {
         startEvents()
         view.addSubview(signOutButton)
         view.addSubview(collectionView)
-        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 150, left: 30, bottom: 0, right: 30))
+        view.addSubview(createButton)
+        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 150, left: 30, bottom: 150, right: 30))
         
+        collectionView.allowsSelection = true
+        collectionView.allowsMultipleSelection = false
         collectionView.dataSource = self
         collectionView.delegate = self
         
         NSLayoutConstraint.activate([
             signOutButton.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
             signOutButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -5),
-            signOutButton.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -85)
+            signOutButton.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -85),
+            
+            createButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            createButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
+            createButton.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -100)
         ])
         
         signOutButton.addTarget(self, action: #selector(didTapSignOut(_:)), for: .touchUpInside)
+        createButton.addTarget(self, action: #selector(didTapCreate(_:)), for: .touchUpInside)
+
     }
     
     @objc func didTapSignOut(_ sender: UIButton) {
@@ -83,6 +105,12 @@ class FeedVC: UIViewController {
             UIView.transition(with: window, duration: duration, options: options, animations: {}, completion: nil)
         }
     }
+    
+    @objc func didTapCreate(_ sender: UIButton) {
+        let VC = CreateEventVC()
+        self.navigationController?.pushViewController(VC, animated: true)
+    }
+    
 }
 
 extension FeedVC: UICollectionViewDataSource {
@@ -101,5 +129,12 @@ extension FeedVC: UICollectionViewDataSource {
 extension FeedVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.bounds.width - 100, height: 300)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let eventName = FIRDatabaseRequest.shared.events[indexPath.item]
+        let VC = EventPreviewVC(eventName: eventName)
+        
+        self.navigationController?.pushViewController(VC, animated: true)
     }
 }

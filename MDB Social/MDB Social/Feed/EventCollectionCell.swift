@@ -41,7 +41,6 @@ class EventCollectionCell: UICollectionViewCell {
             nameView.text = "Event Name: " + eventName.name
 //            posterView.text = "Posted By: " + String(user1.fullname) //Have to change this to user name
             rsvpView.text = "Number RSVP'd: " + String(eventName.rsvpUsers.count)
-            print("set")
         }
     }
     
