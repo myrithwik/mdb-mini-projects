@@ -7,10 +7,14 @@
 
 import UIKit
 import NotificationBannerSwift
+import FirebaseFirestore
+import FirebaseStorage
 
-
-class CreateEventVC: UIViewController {
-
+class CreateEventVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    let storage = Storage.storage()
+    var photoURL: URL?
+    
+    
     private let stack: UIStackView = {
         let stack = UIStackView()
         stack.axis = .vertical
@@ -38,11 +42,16 @@ class CreateEventVC: UIViewController {
         return tf
     }()
     
-    private let pictureField: AuthTextField = {
-        let tf = AuthTextField(title: "Picture (Add more formatting):")
+    private let pictureField: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+        btn.backgroundColor = .primary
+        btn.setTitle("Select Photo", for: .normal)
+        btn.titleLabel?.font = UIFont(name: "...", size: 15)
+        btn.tintColor = .black
+        btn.layer.cornerRadius = 15
         
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
+        btn.translatesAutoresizingMaskIntoConstraints = false
+        return btn
     }()
     
     private let descriptionTextField: AuthTextField = {
@@ -53,7 +62,7 @@ class CreateEventVC: UIViewController {
     }()
     
     private let dateField: AuthTextField = {
-        let tf = AuthTextField(title: "Start Daate (MM/DD/YYYY):")
+        let tf = AuthTextField(title: "Start Daate (DD/MM/YY):")
         
         tf.translatesAutoresizingMaskIntoConstraints = false
         return tf
@@ -78,7 +87,7 @@ class CreateEventVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    
+        
         hideKeyboardWhenTappedAround()
         view.backgroundColor = .background
         view.addSubview(createLabel)
@@ -114,7 +123,8 @@ class CreateEventVC: UIViewController {
         createButton.layer.cornerRadius = createButtonHeight / 2
         
         createButton.addTarget(self, action: #selector(didTapCreate(_:)), for: .touchUpInside)
-        
+        pictureField.addTarget(self, action: #selector(didTapPicture(_:)), for: .touchUpInside)
+
 
         // Do any additional setup after loading the view.
     }
@@ -123,13 +133,65 @@ class CreateEventVC: UIViewController {
         return
     }
     
+    @objc func didTapPicture(_ sender: UIButton) {
+        let picker = UIImagePickerController()
+        picker.allowsEditing = true
+        picker.delegate = self
+        present(picker, animated: true)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        guard let image = info[.editedImage] as? UIImage else { return }
+        var data = Data()
+        //How to return string with image path
+        //Then put it in event consturctor
+        
+        
+        let imageName = UUID().uuidString
+        let imagePath = getDocumentsDirectory().appendingPathComponent(imageName)
+        let storageRef = storage.reference()
+        let imageRef = storageRef.child("\(imagePath)")
+        
+        let jpegData = image.jpegData(compressionQuality: 0.8)
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        
+        let uploadTask = imageRef.putData(jpegData!, metadata: metaData) { (metadata, error) in
+          guard let metadata = metadata else {
+            // Uh-oh, an error occurred!
+            print(error?.localizedDescription)
+            return
+          }
+          // Metadata contains file metadata such as size, content-type.
+          let size = metadata.size
+          // You can also access to download URL after upload.
+            imageRef.downloadURL { (url, error) in
+            guard let downloadURL = url else {
+              print("error setting downloadURL")
+              return
+            }
+            print("Download URL: \(downloadURL)")
+            self.photoURL = downloadURL
+          }
+        }
+        
+        dismiss(animated: true) {
+            return
+        }
+    }
+    
+    func getDocumentsDirectory() -> URL {
+        let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+        return paths[0]
+    }
+    
     @objc func didTapCreate(_ sender: UIButton) {
         guard let name = nameTextField.text, name != "" else {
             showErrorBanner(withTitle: "Missing Event Name",
                             subtitle: "Please provide a name")
             return
         }
-        guard let picture = pictureField.text, picture != "" else {
+        guard let picture = photoURL, photoURL != nil else {
             showErrorBanner(withTitle: "Missing Picture",
                             subtitle: "Please provide a picture")
             return
@@ -139,12 +201,30 @@ class CreateEventVC: UIViewController {
                             subtitle: "Please provide an description")
             return
         }
+        if description.count > 140 {
+            showErrorBanner(withTitle: "Description too Long",
+                            subtitle: "Please keep description under 140 characters")
+            return
+        }
         guard let date = dateField.text, date != "" else {
             showErrorBanner(withTitle: "Missing Date",
                             subtitle: "Please provide a date")
             return
         }
         
+        //take string from date and convert to timeStamp (dateFormatter)
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "dd/MM/yy"
+        let dateString = dateFormatter.date(from: date)
+        let dateTimeStamp  = dateString!.timeIntervalSince1970
+        let dateTS:Timestamp = Timestamp(date: dateString!)
+        let newEvent = Event(name: name, description: description, photoURL: "\(picture)", startTimeStamp: dateTS, creator: FIRAuthProvider.shared.currentUser!.uid!, rsvpUsers: [UserID]())
+        
+        FIRDatabaseRequest.shared.setEvent(newEvent) {
+            //update UI after the event is created
+            self.navigationController?.popViewController(animated: true)
+            return
+        }
             
     }
         

@@ -12,11 +12,28 @@ class EventPreviewVC: UIViewController {
     
     //Add logic for if the person is the owner of the post
     
+    let db = Firestore.firestore()
+
     private let posterView = UILabel()
     private let nameView = UILabel()
     private let imageView = UIImageView()
     private let numRSVPView = UILabel()
     private let descriptionView = UILabel()
+    private var actionButton = UIButton()
+    private var event: Event?
+    
+    lazy var removeButton: UIButton = {
+        let button = UIButton()
+        button.frame = CGRect(x: 100, y: 100, width: 200, height: 100)
+        button.backgroundColor = .systemRed
+        button.setTitle("Remove Event", for: .normal)
+        button.setTitleColor(.white, for: .normal)
+        button.titleLabel?.font = .boldSystemFont(ofSize: 14)
+        button.addTarget(self, action: #selector(handleRemoveBT), for: .touchUpInside)
+        
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
     
     lazy var rsvpButton: UIButton = {
 
@@ -39,7 +56,10 @@ class EventPreviewVC: UIViewController {
         sender.isSelected = !sender.isSelected
 
         if sender.isSelected {
-
+            
+            if !event!.rsvpUsers.contains(FIRAuthProvider.shared.auth.currentUser!.uid) {
+                event!.rsvpUsers.append(FIRAuthProvider.shared.auth.currentUser!.uid)
+            }
             sender.backgroundColor = .systemRed
             sender.setTitleColor(.black, for: .normal)
             rsvpButton.setTitle("Cancel", for: .normal)
@@ -47,11 +67,21 @@ class EventPreviewVC: UIViewController {
 
         else {
 
+            event!.rsvpUsers.removeAll(where: {$0 == FIRAuthProvider.shared.auth.currentUser!.uid})
             sender.backgroundColor = .systemGreen
             sender.setTitleColor(.white, for: .normal)
             rsvpButton.setTitle("RSVP", for: .normal)
         }
+        db.collection("events").document(event!.id!).setData([ "rsvpUsers": event!.rsvpUsers], merge: true)
+
+        numRSVPView.text = "Number RSVP'd: " + String(event!.rsvpUsers.count)
         self.reloadInputViews()
+    }
+    
+    @objc func handleRemoveBT(sender: UIButton) {
+        //use db to remove from Firestone
+        db.collection("events").document(event!.id!).delete()
+        navigationController?.popViewController(animated: true)
     }
 
     override func viewDidLoad() {
@@ -59,7 +89,9 @@ class EventPreviewVC: UIViewController {
         view.addSubview(nameView)
         view.addSubview(numRSVPView)
         view.addSubview(imageView)
-        view.addSubview(rsvpButton)
+        view.addSubview(actionButton)
+//        view.addSubview(rsvpButton)
+//        view.addSubview(removeButton)
         view.addSubview(descriptionView)
         view.backgroundColor = .white
 
@@ -86,16 +118,16 @@ class EventPreviewVC: UIViewController {
             numRSVPView.topAnchor.constraint(equalTo: descriptionView.bottomAnchor, constant: 10),
             numRSVPView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
             
-            rsvpButton.topAnchor.constraint(equalTo: numRSVPView.bottomAnchor, constant: 10),
-            rsvpButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
+            actionButton.topAnchor.constraint(equalTo: numRSVPView.bottomAnchor, constant: 10),
+            actionButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10),
+            
+//            removeButton.topAnchor.constraint(equalTo: numRSVPView.bottomAnchor, constant: 10),
+//            removeButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10)
         ])
     }
 
     init(eventName: Event) {
         super.init(nibName: nil, bundle: nil)
-
-        //I shouldn't be instantiating db everywhere
-        let db = Firestore.firestore()
         
         imageView.clipsToBounds = true
         imageView.contentMode = .scaleAspectFit
@@ -119,6 +151,7 @@ class EventPreviewVC: UIViewController {
                 self.imageView.image = UIImage(data: data!) ?? UIImage()
             }
         }
+        event = eventName
         nameView.text = "Event Name: " + eventName.name
         numRSVPView.text = "Number RSVP'd: " + String(eventName.rsvpUsers.count)
         descriptionView.text = "Description: " + eventName.description
@@ -129,9 +162,15 @@ class EventPreviewVC: UIViewController {
         nameView.translatesAutoresizingMaskIntoConstraints = false
         numRSVPView.translatesAutoresizingMaskIntoConstraints = false
         posterView.translatesAutoresizingMaskIntoConstraints = false
-        rsvpButton.translatesAutoresizingMaskIntoConstraints = false
         descriptionView.translatesAutoresizingMaskIntoConstraints = false
 
+        if event!.creator != FIRAuthProvider.shared.auth.currentUser!.uid {
+            actionButton = rsvpButton
+            rsvpButton.translatesAutoresizingMaskIntoConstraints = false
+        } else {
+            actionButton = removeButton
+            removeButton.translatesAutoresizingMaskIntoConstraints = false
+        }
     }
 
     required init?(coder: NSCoder) {

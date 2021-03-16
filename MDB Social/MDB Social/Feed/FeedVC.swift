@@ -66,7 +66,7 @@ class FeedVC: UIViewController {
         view.addSubview(signOutButton)
         view.addSubview(collectionView)
         view.addSubview(createButton)
-        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 150, left: 30, bottom: 150, right: 30))
+        collectionView.frame = view.bounds.inset(by: UIEdgeInsets(top: 150, left: 30, bottom: 100, right: 30))
         
         collectionView.allowsSelection = true
         collectionView.allowsMultipleSelection = false
@@ -128,7 +128,7 @@ extension FeedVC: UICollectionViewDataSource {
 
 extension FeedVC: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: view.bounds.width - 100, height: 300)
+        return CGSize(width: view.bounds.width - 100, height: 200)
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
