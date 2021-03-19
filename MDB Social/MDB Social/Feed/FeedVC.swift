@@ -61,6 +61,10 @@ class FeedVC: UIViewController {
         return btn
     }()
     
+    override func viewDidAppear(_ animated: Bool) {
+        startEvents()
+    }
+    
     override func viewDidLoad() {
         startEvents()
         view.addSubview(signOutButton)
