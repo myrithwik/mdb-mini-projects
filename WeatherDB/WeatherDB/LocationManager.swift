@@ -32,6 +32,15 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         location = locations.first
+        
+//        WeatherRequest.shared.weather(at: location!, completion: { result in
+//            switch result {
+//            case .success(let weather):
+//                print(type(of: weather))
+//            case .failure(let error):
+//                print(error)
+//            }
+//        })
     }
     
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
@@ -41,4 +50,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         
     }
+        
 }
