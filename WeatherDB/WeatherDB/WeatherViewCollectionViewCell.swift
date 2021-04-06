@@ -9,6 +9,19 @@ import UIKit
 
 class WeatherViewCollectionViewCell: UICollectionViewCell {
     
+    var color: UIColor? {
+        didSet {
+            self.cityName.textColor = self.color
+            self.weatherType.textColor = self.color
+            self.currentWeather.textColor = self.color
+            self.maxTemp.textColor = self.color
+            self.minTemp.textColor = self.color
+            self.feelTemp.textColor = self.color
+            self.pressure.textColor = self.color
+            self.humidity.textColor = self.color
+        }
+    }
+    
     static let reuseIdentifier: String = String(describing: WeatherViewCollectionViewCell.self)
 
     var weather: Weather? {

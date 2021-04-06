@@ -15,10 +15,17 @@ class ViewController: UIViewController {
     
     let myLocation = CLLocation(latitude: 37.8715, longitude: 122.2730)
     
+    
     let secondLocation = CLLocation(latitude: 24.33, longitude: 100.12)
+    
+    var darkMode = false
     
     var locations: [CLLocation] = [] {
         didSet {
+//            locations.map { (location : CLLocation) -> Void in
+//
+//            }
+//            let latitudeArray = UserDefaults.standard.NSArray(ßforKey: "latitudes") ?? []
             collectionView.reloadData()
         }
     }
@@ -43,21 +50,23 @@ class ViewController: UIViewController {
         return collectionView
     }()
     
-    func reloadData() {
-        collectionView.reloadData()
+    func getData() {
+        
     }
     
     func addLocation(location: CLLocation) {
         locations.append(location)
     }
     
-    private let addButton: UIButton = {
-        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 200, height: 100))
+    private let darkButton: UIButton = {
+        let btn = UIButton(frame: CGRect(x: 0, y: 0, width: 100, height: 100))
         btn.backgroundColor = .systemBlue
-        btn.setTitle("Add Location", for: .normal)
+        btn.setTitle("Dark Mode", for: .normal)
         btn.titleLabel?.font = UIFont(name: "...", size: 18)
         btn.tintColor = .black
         btn.layer.cornerRadius = 15
+        btn.isSelected = false
+        btn.addTarget(self, action: #selector(didTapDark), for: .touchUpInside)
         
         btn.translatesAutoresizingMaskIntoConstraints = false
         
@@ -65,15 +74,16 @@ class ViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.currLocation = LocationManager.shared.location!
         }
+
         super.viewDidLoad()
 //        locations.append(myLocation)
 //        locations.append(secondLocation)
         
         view.addSubview(collectionView)
-//        view.addSubview(addButton)
+        view.addSubview(darkButton)
         let gplaceButton = makeButton()
         self.view.addSubview(gplaceButton)
 
@@ -87,11 +97,13 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             gplaceButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
             gplaceButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10),
-            gplaceButton.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -150)
+            gplaceButton.leadingAnchor.constraint(equalTo: view.trailingAnchor, constant: -150),
+            
+            darkButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -50),
+            darkButton.trailingAnchor.constraint(equalTo: view.leadingAnchor, constant: 130),
+            darkButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30)
         ])
-        
-//        addButton.addTarget(self, action: #selector(didTapAdd(_:)), for: .touchUpInside)
-        
+                
     }
     
     @objc func autocompleteClicked(_ sender: UIButton) {
@@ -127,11 +139,24 @@ class ViewController: UIViewController {
         return btn
     }
     
-//    @objc func didTapAdd(_ sender: UIButton) {
-//        let VC = AddLocation()
-//        self.present(VC, animated: true)
-////        self.navigationController?.pushViewController(VC, animated: true)
-//    }
+    @objc func didTapDark(_ sender: UIButton) {
+        sender.isSelected = !sender.isSelected
+        
+        if sender.isSelected {
+            //Dark
+            view.backgroundColor = .black
+            darkMode = true
+            sender.setTitle("Light Mode", for: .normal)
+            self.view.overrideUserInterfaceStyle = .dark
+        } else {
+            //light
+            sender.setTitle("Dark Mode", for: .normal)
+            self.view.backgroundColor = .white
+            self.view.overrideUserInterfaceStyle = .light
+            darkMode = false
+        }
+        self.collectionView.reloadData()
+    }
 }
 
 extension ViewController: UICollectionViewDataSource {
@@ -141,6 +166,13 @@ extension ViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: WeatherViewCollectionViewCell.reuseIdentifier, for: indexPath) as! WeatherViewCollectionViewCell
+        
+        if darkMode {
+            cell.color = .white
+        } else {
+            cell.color = .black
+        }
+        
         let location  = locations[indexPath.item]
         WeatherRequest.shared.weather(at: location, completion: { result in
            switch result {
@@ -172,7 +204,7 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
 //    let newLocation = CLLocation(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
     let geoCoder = CLGeocoder()
     print(String(place.coordinate.latitude) + ", " + String(place.coordinate.longitude))
-    geoCoder.geocodeAddressString(place.formattedAddress!) { (placemarks, error) in
+    geoCoder.geocodeAddressString(place.name!) { (placemarks, error) in
         guard
             let placemarks = placemarks,
             let location = placemarks.first?.location
