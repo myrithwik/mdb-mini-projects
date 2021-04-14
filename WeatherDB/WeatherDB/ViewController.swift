@@ -78,6 +78,7 @@ class ViewController: UIViewController {
             self.currLocation = LocationManager.shared.location!
         }
 
+        view.overrideUserInterfaceStyle = .dark
         super.viewDidLoad()
 //        locations.append(myLocation)
 //        locations.append(secondLocation)
