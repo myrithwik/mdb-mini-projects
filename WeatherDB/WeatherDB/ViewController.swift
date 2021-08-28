@@ -202,23 +202,7 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
     print("Place name: \(place.name)")
     print("Place ID: \(place.placeID)")
     print("Place attributions: \(place.attributions)")
-//    let newLocation = CLLocation(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
-    let geoCoder = CLGeocoder()
-    print(String(place.coordinate.latitude) + ", " + String(place.coordinate.longitude))
-    geoCoder.geocodeAddressString(place.name!) { (placemarks, error) in
-        guard
-            let placemarks = placemarks,
-            let location = placemarks.first?.location
-        else {
-            // handle no location found
-            return
-        }
-        print(type(of: location))
-        self.locations.append(location)
-    }
-//    self.locations.append(newLocation)
     dismiss(animated: true, completion: nil)
-
   }
 
   func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
@@ -241,4 +225,51 @@ extension ViewController: GMSAutocompleteViewControllerDelegate {
   }
 
 }
+
+//extension ViewController: GMSAutocompleteViewControllerDelegate {
+//
+//  // Handle the user's selection.
+//  func viewController(_ viewController: GMSAutocompleteViewController, didAutocompleteWith place: GMSPlace) {
+//    print("Place name: \(place.name)")
+//    print("Place ID: \(place.placeID)")
+//    print("Place attributions: \(place.attributions)")
+////    let newLocation = CLLocation(latitude: place.coordinate.latitude, longitude: place.coordinate.longitude)
+//    let geoCoder = CLGeocoder()
+//    print(String(place.coordinate.latitude) + ", " + String(place.coordinate.longitude))
+//    geoCoder.geocodeAddressString(place.name!) { (placemarks, error) in
+//        guard
+//            let placemarks = placemarks,
+//            let location = placemarks.first?.location
+//        else {
+//            // handle no location found
+//            return
+//        }
+//        print(type(of: location))
+//        self.locations.append(location)
+//    }
+////    self.locations.append(newLocation)
+//    dismiss(animated: true, completion: nil)
+//
+//  }
+//
+//  func viewController(_ viewController: GMSAutocompleteViewController, didFailAutocompleteWithError error: Error) {
+//    // TODO: handle the error.
+//    print("Error: ", error.localizedDescription)
+//  }
+//
+//  // User canceled the operation.
+//  func wasCancelled(_ viewController: GMSAutocompleteViewController) {
+//    dismiss(animated: true, completion: nil)
+//  }
+//
+//  // Turn the network activity indicator on and off again.
+//  func didRequestAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+//    UIApplication.shared.isNetworkActivityIndicatorVisible = true
+//  }
+//
+//  func didUpdateAutocompletePredictions(_ viewController: GMSAutocompleteViewController) {
+//    UIApplication.shared.isNetworkActivityIndicatorVisible = false
+//  }
+//
+//}
 
